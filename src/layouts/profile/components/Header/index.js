@@ -33,14 +33,29 @@ import MDAvatar from "components/MDAvatar";
 
 //  React base styles
 import breakpoints from "assets/theme/base/breakpoints";
+import MDButton from "components/MDButton";
 
 // Images
 import burceMars from "assets/images/bruce-mars.jpg";
 import backgroundImage from "assets/images/bg-profile.jpeg";
+import {
+  LoggoutEmpty,
+} from '../../../../modules/auth/actions';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Header({ children }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
+  const dispatch = useDispatch()
+  const auth = useSelector((authItem) => authItem.auth);
+
+  const logout = () => {
+    dispatch(LoggoutEmpty())
+  }
+
+  useEffect(() => {
+    console.log("auth logout ", auth)
+  }, [auth])
 
   useEffect(() => {
     // A function that sets the orientation state of the tabs.
@@ -107,6 +122,11 @@ function Header({ children }) {
             </MDBox>
           </Grid>
           <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
+          <MDButton onClick={() => {
+            logout()
+          }} to={'*'} variant="text" color="info">
+            Logout
+          </MDButton>
             <AppBar position="static">
               <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
                 <Tab

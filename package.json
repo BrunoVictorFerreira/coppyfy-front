@@ -10,6 +10,7 @@
     "npm": ">=6"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.2",
     "@emotion/cache": "11.7.1",
     "@emotion/react": "11.7.1",
     "@emotion/styled": "11.6.0",
@@ -19,27 +20,40 @@
     "@testing-library/jest-dom": "5.16.2",
     "@testing-library/react": "12.1.2",
     "@testing-library/user-event": "13.5.0",
+    "axios": "^1.2.1",
     "chart.js": "3.4.1",
     "chroma-js": "2.4.2",
+    "cross-env": "^7.0.3",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^16.0.3",
+    "graphql": "^16.6.0",
     "prop-types": "15.8.1",
-    "react": "17.0.2",
+    "react": "^18.2.0",
     "react-chartjs-2": "3.0.4",
-    "react-dom": "17.0.2",
+    "react-dom": "18.2.0",
+    "react-dotenv": "^0.1.3",
     "react-github-btn": "1.2.1",
+    "react-redux": "^8.0.5",
     "react-router-dom": "6.2.1",
     "react-scripts": "5.0.0",
     "react-table": "7.7.0",
+    "redux": "^4.2.0",
+    "redux-persist": "^6.0.0",
+    "redux-saga": "^1.2.1",
+    "redux-thunk": "^2.4.2",
     "stylis": "4.0.13",
     "stylis-plugin-rtl": "2.1.1",
+    "sweetalert2": "^11.6.15",
     "web-vitals": "2.1.4",
     "yup": "0.32.11"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "GENERATE_SOURCEMAP=false react-scripts start",
+    "build": "react-dotenv && react-scripts build",
+    "serve": "react-dotenv && serve build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start"
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install --force && npm start"
   },
   "eslintConfig": {
     "extends": [
@@ -69,5 +83,10 @@
     "eslint-plugin-react": "7.28.0",
     "eslint-plugin-react-hooks": "4.3.0",
     "prettier": "2.5.1"
+  },
+  "react-dotenv": {
+    "whitelist": [
+      "REACT_APP_BASE_URL"
+    ]
   }
 }

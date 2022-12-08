@@ -30,7 +30,6 @@ import bgImage from "assets/images/bg-reset-cover.jpeg";
 
 function Cover() {
   return (
-    <CoverLayout coverHeight="50vh" image={bgImage}>
       <Card>
         <MDBox
           variant="gradient"
@@ -63,7 +62,6 @@ function Cover() {
           </MDBox>
         </MDBox>
       </Card>
-    </CoverLayout>
   );
 }
 

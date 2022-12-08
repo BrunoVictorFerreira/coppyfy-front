@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // react-router-dom components
 import { Link } from "react-router-dom";
@@ -40,11 +40,49 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
+import validateEmail from "utils/validateEmail";
+import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2'
+import {
+  LoginRequest,
+} from '../../../modules/auth/actions';
 
 function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
-
+  const [email, setEmail] = useState(false);
+  const [password, setPassword] = useState(false);
+  const dispatch = useDispatch()
+  const auth = useSelector((authItem) => authItem.auth);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
+  const handleSubmit = () => {
+    if (email == "" || password == "") {
+      Swal.fire({
+        title: 'Erro!',
+        text: 'Preencha todos os campos',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
+      // dispatch(AddAlert("Preencha os campos"));
+    }else{
+      if(validateEmail(email)){
+        dispatch(
+          LoginRequest({
+            email,
+            password
+          })
+        );
+      }else{
+        Swal.fire({
+          title: 'Erro!',
+          text: 'Este email é inválido',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
+        // dispatch(AddAlert("Email não é válido"));
+      }
+    }
+  }
 
   return (
     <BasicLayout image={bgImage}>
@@ -84,10 +122,14 @@ function Basic() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" fullWidth />
+              <MDInput type="email" label="Email" onChange={(event) => {
+                setEmail(event.target.value)
+              }} fullWidth />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" fullWidth />
+              <MDInput type="password" label="Password" fullWidth onChange={(event) => {
+                setPassword(event.target.value)
+              }} />
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -102,7 +144,9 @@ function Basic() {
               </MDTypography>
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
+              <MDButton variant="gradient" color="info" fullWidth onClick={() => {
+                handleSubmit()
+              }}>
                 sign in
               </MDButton>
             </MDBox>

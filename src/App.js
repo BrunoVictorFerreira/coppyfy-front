@@ -25,8 +25,15 @@ import rtlPlugin from "stylis-plugin-rtl";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
-import routes from "routes";
-
+import Dashboard from "layouts/dashboard";
+import Tables from "layouts/tables";
+import Billing from "layouts/billing";
+import RTL from "layouts/rtl";
+import Notifications from "layouts/notifications";
+import Profile from "layouts/profile";
+import SignIn from "layouts/authentication/sign-in";
+import SignUp from "layouts/authentication/sign-up";
+import { useDispatch, useSelector } from 'react-redux';
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
 
 // Images
@@ -48,6 +55,85 @@ export default function App() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
+  const auth = useSelector((authItem) => authItem.auth);
+  useEffect(() => {
+
+    console.log("authhhhh", auth)
+  }, [auth])
+  const routes = [
+    {
+      type: "collapse",
+      name: "Dashboard",
+      key: "dashboard",
+      icon: <Icon fontSize="small">dashboard</Icon>,
+      route: "/dashboard",
+      auth: true,
+      component: <Dashboard />,
+    },
+    {
+      type: "collapse",
+      name: "Tables",
+      key: "tables",
+      icon: <Icon fontSize="small">table_view</Icon>,
+      route: "/tables",
+      auth: true,
+      component: <Tables />,
+    },
+    {
+      type: "collapse",
+      name: "Billing",
+      key: "billing",
+      icon: <Icon fontSize="small">receipt_long</Icon>,
+      route: "/billing",
+      auth: true,
+      component: <Billing />,
+    },
+    {
+      type: "collapse",
+      name: "RTL",
+      key: "rtl",
+      icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
+      route: "/rtl",
+      auth: true,
+      component: <RTL />,
+    },
+    {
+      type: "collapse",
+      name: "Notifications",
+      key: "notifications",
+      icon: <Icon fontSize="small">notifications</Icon>,
+      route: "/notifications",
+      auth: true,
+      component: <Notifications />,
+    },
+    {
+      type: "collapse",
+      name: "Profile",
+      key: "profile",
+      icon: <Icon fontSize="small">person</Icon>,
+      route: "/profile",
+      auth: true,
+      component: <Profile />,
+    },
+    {
+      type: "collapse",
+      name: "Sign In",
+      key: "sign-in",
+      icon: <Icon fontSize="small">login</Icon>,
+      route: "/authentication/sign-in",
+      auth: false,
+      component: <SignIn />,
+    },
+    {
+      type: "collapse",
+      name: "Sign Up",
+      key: "sign-up",
+      icon: <Icon fontSize="small">assignment</Icon>,
+      route: "/authentication/sign-up",
+      auth: false,
+      component: <SignUp />,
+    },
+  ];
 
   // Cache for the rtl
   useMemo(() => {
@@ -89,8 +175,8 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-  const getRoutes = (allRoutes) =>
-    allRoutes.map((route) => {
+  const getRoutes = (allRoutes) => 
+    allRoutes?.map((route) => {
       if (route.collapse) {
         return getRoutes(route.collapse);
       }
@@ -146,8 +232,8 @@ export default function App() {
         )}
         {layout === "vr" && <Configurator />}
         <Routes>
-          {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+          {getRoutes(routes?.filter(item => item.auth == (auth.token != null)))}
+          <Route path="*" element={<Navigate to={auth.token != null ? "/dashboard" : "/authentication/sign-in"}/>} />
         </Routes>
       </ThemeProvider>
     </CacheProvider>
@@ -160,7 +246,7 @@ export default function App() {
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
             brandName="Bruno"
-            routes={routes}
+            routes={routes?.filter(item => item.auth == (auth.token != null))}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />
@@ -170,8 +256,8 @@ export default function App() {
       )}
       {layout === "vr" && <Configurator />}
       <Routes>
-        {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
+        {getRoutes(routes?.filter(item => item.auth == (auth.token != null)))}
+        <Route path="*" element={<Navigate to={auth.token != null ? "/dashboard" : "/authentication/sign-in"} />} />
       </Routes>
     </ThemeProvider>
   );
