@@ -44,6 +44,7 @@ function Tables() {
   const auth = useSelector((authItem) => authItem.auth);
   const [firstTeam, setFirstTeam] = useState(null)
   const [secondTeam, setSecondTeam] = useState(null)
+  const [matchDate, setMatchDate] = useState(null)
   const [matchId, setMatchId] = useState(null)
   const [firstTeamResult, setFirstTeamResult] = useState(null)
   const [secondTeamResult, setSecondTeamResult] = useState(null)
@@ -76,7 +77,8 @@ function Tables() {
       variables: {
         first_team: firstTeam,
         second_team: secondTeam,
-        important: important == 'true' ? true : false
+        important: important == 'true' ? true : false,
+        date: matchDate
       },
     })
       .then((resp) => {
@@ -124,6 +126,15 @@ function Tables() {
         <option value={false}>Não</option>
         <option value={true}>Sim</option>
       </select>
+      <input 
+      type={"datetime-local"}
+      onChange={(event) => {
+        console.log(event.target.value)
+        setMatchDate(event.target.value)
+      }}>
+        
+      </input>
+        
 
       <MDButton
         to={"*"}

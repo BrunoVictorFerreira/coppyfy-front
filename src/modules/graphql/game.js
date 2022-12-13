@@ -4,12 +4,14 @@ export const CREATE_GAME = gql`
   mutation createGame(
     $first_team: ID!,
 	$second_team: ID!,
-	$important: Boolean
+	$important: Boolean,
+  $date: String
   ) {
     create_game(
         first_team: $first_team,
         second_team: $second_team,
-        important: $important
+        important: $important,
+        date: $date
     )
   }
 `;
